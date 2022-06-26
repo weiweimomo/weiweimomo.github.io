@@ -1,0 +1,102 @@
+<!--
+ * @Description: 
+ * @version: 2.0
+ * @Author: 小橙子
+ * @Date: 2019-05-15 09:33:43
+ * @Website: https://www.kres.cn
+ * @Email: 1697779290@qq.com
+ -->
+ <!DOCTYPE html>
+
+ <html>
+ <head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <title>UserInfo Page. By the LoveWall 2.0.190520</title>
+   <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+ </head>
+ <body style="padding:10px">
+     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+         <legend>内容详情</legend>
+       </fieldset>   
+        
+       <div style="padding: 20px; background-color: #F2F2F2;">
+         <div class="layui-row layui-col-space15">
+           <div class="layui-col-md6">
+             <div class="layui-card">
+               <div class="layui-card-header">用户信息</div>
+               <div class="layui-card-body">
+                 <span class="layui-badge layui-bg-orange">用户账号</span>&nbsp;<span class="layui-badge-rim">{$data.username}</span><br>
+                 <span class="layui-badge layui-bg-blue">用户密码</span>&nbsp;<span class="layui-badge-rim">{$data.password}</span><br>
+                 <span class="layui-badge layui-bg-black">最后登录</span>&nbsp;<span class="layui-badge-rim">{$data.login_time}</span><br>
+                 <span class="layui-badge layui-bg-blue">用户邮箱</span>&nbsp;<span class="layui-badge-rim">{$data.email}</span><br>
+                 <span class="layui-badge layui-bg-orange">用户QQ</span>&nbsp;<span class="layui-badge-rim">{$data.qq}</span><br>
+                 <span class="layui-badge layui-bg-blue">登录IP</span>&nbsp;<span class="layui-badge-rim">{$data.login_ip}</span><br>
+               </div>
+             </div>
+           </div>
+           <div class="layui-col-md6">
+             <div class="layui-card">
+               <div class="layui-card-header">修改密码</div>
+               <div class="layui-card-body">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">新密码</label>
+                            <div class="layui-input-inline">
+                                <input name="id" type="hidden" value="{$data.id}">
+                            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">辅助文字</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block" style="float:right">
+                                <button class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="upPassword">立即提交</button>
+                            </div>
+                        </div>
+                    </form>
+               </div>
+             </div>
+           </div>
+           <div class="layui-col-md12">
+             <div class="layui-card">
+               <div class="layui-card-header">用户日志</div>
+               <div class="layui-card-body">
+               </div>
+             </div>
+           </div>
+         </div>
+       </div> 
+  
+ <!-- 你的HTML代码 -->
+ <script src="__STATICS__/js/jquery.min.js"></script>  
+ <script src="__STATICS__/layui/layui.js"></script>
+ <script>
+ //一般直接写在一个js文件中
+ layui.use(['layer', 'form'], function(){
+   var layer = layui.layer
+   ,form = layui.form;
+   form.on('submit(upPassword)',function(data){
+       layer.msg('提交ing',{icon:16})
+       $.ajax({
+           url:"{:url('index/upPassword')}"
+           ,type:'POST'
+           ,data:{id:data.field.id,password:data.field.password}
+           ,dataType:"JSON"
+           ,success:function(res){
+               if(res.code==1){
+                    layer.msg(res.info,{icon:1,time:1000})
+               }else{
+                    layer.msg(res.info,{icon:2,time:1000})  
+               }
+           }
+           ,error:function(){
+                layer.msg('网络错误',{icon:2,time:1000})
+           }
+       })
+       return false;
+   })
+   //layer.msg('Hello World');
+ });
+ </script> 
+ </body>
+ </html>

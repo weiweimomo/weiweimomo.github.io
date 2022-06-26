@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>layedit demo</title>
+	<link href="__STATICS__/layui/css/layui.css" rel="stylesheet" />
+    <script src="__STATICS__/layui/layui.js"></script>
+    <script src="__STATICS__/js/jquery.min.js"></script>
+</head>
+<body style="padding:10px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+        	<textarea id="noticeAddBox"></textarea>
+        </div>
+        <div class="layui-form-item">
+        <div class="layui-input-block" style="float:right;">
+            <button class="layui-btn" lay-submit lay-filter="noticeAdd" style="background:skyblue;">立即提交</button>
+        </div>
+        </div>
+        <div class="layui-form-item">
+            <div id='returndt' class="rtdt"></div>
+        </div>
+    </form>
+
+		
+		
+        <script>
+            layui.use(['layedit','layer','jquery','form'], function(){
+                var layedit = layui.layedit
+                ,form = layui.form
+                ,layer = layui.layer
+                ,jquery = layui.jquery
+                ,set = layedit.set({
+					uploadImage: {
+						url: '{:url('index/index/upload')}' //接口url
+					    ,field: 'file'//上传时的文件参数字段名
+					    ,accept: 'image'
+	                    ,acceptMime: 'image/*'
+	                    ,exts: 'jpg|png|gif|bmp|jpeg'
+	                    ,size: 1024 * 10
+	                    ,done: function (data) {
+		                    console.log(data);
+		                }
+					}
+					, rightBtn: {
+		                type: "layBtn",//default|layBtn|custom  浏览器默认/layedit右键面板/自定义菜单 default和layBtn无需配置customEvent
+		                customEvent: function (targetName, event) {
+		                    //根据tagName分类型设置
+		                    switch (targetName) {
+		                        case "img":
+		                            alert("this is img");
+		                            break;
+		                        default:
+		                            alert("hello world");
+		                            break;
+		                    };
+		                    //或者直接统一设定
+		                    //alert("all in one");
+		                }
+		            }
+		            //测试参数
+		            , backDelImg: false
+		            //开发者模式 --默认为false
+		            , devmode: true
+		            //是否自动同步到textarea
+		            , autoSync: true
+		            //内容改变监听事件
+		            , onchange: function (content) {
+		                console.log(content);
+		            }
+		            //插入代码设置 --hide:false 等同于不配置codeConfig
+		            , codeConfig: {
+		                hide: true,  //是否隐藏编码语言选择框
+		                default: 'javascript', //hide为true时的默认语言格式
+		                encode: true //是否转义
+		                ,class:'layui-code' //默认样式
+		            }
+					, customlink:{
+		                title: '插入LoveWall官网'
+		                , href: 'https://521wall.cn'
+		                ,onmouseup:''
+		            }
+					,tool: [
+		                'html', 'undo', 'redo', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|','removeformat', 'fontFomatt', 'fontfamily','fontSize', 'fontBackColor', 'colorpicker', 'face'
+		                , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'image_alt', 'anchors'
+		                , '|'
+		                , 'table','customlink'
+		             ]
+		             
+				});
+                var edit = layedit.build('noticeAddBox'); //建立编辑器
+                layedit.setContent(ieditor,"hello layedit",false);
+                form.on('submit(noticeAdd)', function(data){
+                    //layer.msg(layedit.getContent(edit));
+                    $.ajax({
+                        url:"{:url('index/noticeAjaxAdd')}"
+                        ,type:'POST'
+                        ,dataType:'JSON'
+                        ,data:{func:'add',content:layedit.getContent(edit)}
+                        ,success:function(res){
+                            if(res.code==1){
+                                layer.msg(res.info,{icon:1,time:1000});
+                            }else{
+                                layer.msg(res.info,{icon:1,time:1000});
+                            }
+                        }
+                    })
+                    return false;
+                });
+            });
+        </script>
+    </body>
+</html>

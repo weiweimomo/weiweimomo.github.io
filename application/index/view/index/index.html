@@ -1,0 +1,41 @@
+{include file="comm/head" /}
+	<div class="menu">
+		<div class="container">
+			<nav>
+				<a href="/" class="active">首页</a>
+				<a href="{:url('index/openschool')}" class="">开通</a>
+				<a href="{:url('index/serachInfo')}" class="">搜索</a>
+				<a href="{:url('index/about')}" class="">关于</a>
+			</nav>
+		</div>
+	</div>
+</div>
+<div id="content">
+	<div class="container">
+		<div class="list-item">
+			{volist name="indexContent" id="vo"}
+				<div class="item {eq name='vo.status' value='1'}girl{/eq}" >
+					<article style="">
+	               		{$vo.web_description}
+					</article>
+					<div class="author">		
+						<img class="avatar" src="{$vo.web_logo}">
+						<p class="name">
+							{$vo.web_name}
+						</p>
+						<img style="float: right;margin-top: -50px;margin-right: 10px;" id="scho-{$vo.zid}{$vo.web_name}" class="avatars" width="40px" src="__STATICS__/img/goto.png" alt="">
+						<p class="date">
+							<i style="color:#F4A7B9" class="layui-icon">&#xe756;</i>
+							&nbsp;<span style="color:#F4A7B9">{gt name="vo.hot" value="99"}{gt name="vo.hot" value="1000"}{$vo.hot/1000}K{else/}99+{/gt}{else/}{$vo.hot}{/gt}</span>
+							&nbsp;<i style="color:#F4A7B9" class="layui-icon">&#xe611;</i>
+							&nbsp;<span style="color:#F4A7B9">{gt name="vo.count" value="99"}{gt name="vo.count" value="1000"}{$vo.count/1000}K{else/}99+{/gt}{else/}{$vo.count}{/gt}</span>
+						</p>
+					</div>
+				</div>
+			{/volist}
+		</div>
+	</div>
+	<div class="list-pages">
+		{$page}
+	</div>  
+	{include file="comm/footer" /}

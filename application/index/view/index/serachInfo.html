@@ -1,0 +1,53 @@
+{include file="comm/head"}
+	<div class="menu">
+		<div class="container">
+			<nav>
+				<a href="/" class="">首页</a>
+    			<a href="{:url('index/openschool')}" class="">开通</a>
+    			<a href="{:url('index/serachInfo')}" class="active">搜索</a>
+    			<a href="{:url('index/about')}" class="">关于</a>
+			</nav>
+		</div>
+	</div>
+</div>
+<div id="content">
+<div style="padding:10px">
+  <div class="layui-collapse" lay-accordion>
+    <div class="layui-card">
+      <div class="layui-card-header">提交搜索</div>
+      <div class="layui-card-body">
+          <blockquote class="layui-elem-quote">在此检索全站内容</blockquote>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">搜索类型</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="type" value="qq" title="qq" lay-filter='type'>
+                  <input type="radio" name="type" value="text" title="内容" lay-filter='type' checked>
+                </div>
+              </div>
+          <div class="layui-form-item">
+              <label class="layui-form-label">输入框</label>
+              <div class="layui-input-block">   
+            <input type="text" name="content" required  lay-verify="required" placeholder="输入内容" autocomplete="off" class="layui-input">
+          </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-input-block">
+              <button class="layui-btn" lay-submit lay-filter="subSerach">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="layui-collapse" lay-accordion>
+      <div class="layui-card">
+        <div class="layui-card-header">搜索结果</div>
+        <div style="padding:10px">
+            <div class="layui-card-body return-data" ></div>
+          </div>
+      </div>
+    </div>
+</div>
+
+{include file="comm/footer"}

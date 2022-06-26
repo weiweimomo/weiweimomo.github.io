@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Setting Page. By the LoveWall 2.0.190520</title>
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+</head>
+
+<body style="padding:10px">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>网站基本设置</legend>
+    </fieldset>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">超级管理</label>
+                  <div class="layui-input-block">
+              <select name="admin_account" lay-verify="" lay-search>
+                {foreach $data.user.list as $userlist}
+                <option value="{$userlist.id}" {eq name="data.admin_account" value="userlist.id"}selected{/eq}>{$userlist.username}</option>
+                {/foreach}
+              </select>    
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">网站名称</label>
+            <div class="layui-input-block">
+                <input value="{$data.name}" type="text" name="name" required  lay-verify="required" placeholder="网站底部显示名字" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            <div class="layui-form-item">
+            <label class="layui-form-label">网站标题</label>
+            <div class="layui-input-block">
+                <input value="{$data.title}" type="text" name="title" required  lay-verify="required" placeholder="网站首页标题" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            <div class="layui-form-item">
+            <label class="layui-form-label">网站关键词</label>
+            <div class="layui-input-block">
+                <input value="{$data.keywords}" type="text" name="keywords" required  lay-verify="required" placeholder="网站Seo相关-关键词" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            <div class="layui-form-item">
+            <label class="layui-form-label">网站描述</label>
+            <div class="layui-input-block">
+                <input value="{$data.description}" type="text" name="description" required  lay-verify="required" placeholder="网站Seo相关-描述" autocomplete="off" class="layui-input">
+            </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">ICP备案</label>
+                <div class="layui-input-block">
+                  <input value="{$data.icp}" type="text" name="icp" required  lay-verify="required" placeholder="备案ICP" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">联系QQ</label>
+                <div class="layui-input-block">
+                    <input value="{$data.qq}" type="text" name="qq" required  lay-verify="number" placeholder="站点联系客服qq" autocomplete="off" class="layui-input">
+                </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">统计Code</label>
+                <div class="layui-input-block">
+                    <textarea name="cnzz" placeholder="请输入内容,支持HTML" class="layui-textarea">{$data.cnzz}</textarea>
+                </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">关于本站</label>
+                <div class="layui-input-block">
+                    <textarea name="page_about" placeholder="请输入内容,支持HTML" class="layui-textarea">{$data.page_about}</textarea>
+                </div>
+                </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="subData">立即提交</button>
+            </div>
+        </div>
+    </form>
+
+    <script src="__STATICS__/js/jquery.min.js"></script>
+ <script src="__STATICS__/layui/layui.js"></script>
+ <script>
+ //一般直接写在一个js文件中
+function checkApiStatus(){
+$.ajax({
+url:'https://api.kres.cn/index/index/sendEmail'
+,type:'POST'
+,dataType:'JSON'
+,data:{func:'checkToken',token:$('input[name=token]').val()}
+,success:function(res){
+if (res.err==0) {
+layer.msg(res.msg,{icon:1});
+} else {
+layer.msg(res.msg,{icon:2});
+
+}
+}
+})
+}
+ layui.use(['layer', 'form'], function(){
+   var layer = layui.layer
+   ,form = layui.form;
+   form.on('submit(subData)',function(data){
+    //    layer.msg(JSON.stringify(data.field))
+        $.ajax({
+            url:''
+            ,type:'POST'
+            ,data:{data:JSON.stringify(data.field)}
+            ,dataType:'JSON'
+            ,success:function(res){
+                if(res.code==1){
+                    layer.msg(res.info);
+                }else{
+                    layer.msg(res.info);
+                }
+            }
+            ,error:function(){
+                layer.msg('网络错误！');
+            }
+        })
+       return false
+   })
+   //layer.msg('Hello World');
+ });
+ </script> 
+</body>
+
+</html>

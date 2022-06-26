@@ -1,0 +1,64 @@
+{include file="comm/head"}
+	<div class="menu">
+		<div class="container">
+			<nav>
+				<a href="/" class="">首页</a>
+    			<a href="{:url('index/openschool')}" class="active">开通</a>
+    			<a href="{:url('index/serachInfo')}" class="">搜索</a>
+    			<a href="{:url('index/about')}" class="">关于</a>
+			</nav>
+		</div>
+	</div>
+</div>
+<br/>
+<div id="content">
+	<div class="layui-card" style="padding:10px">
+	<div class="layui-card-header">开通站点</div>
+	<div class="layui-card-body">
+		<blockquote class="layui-elem-quote">注意：确保开通信息真实有效！</blockquote>
+	</div>
+    <div class="layui-card-body">
+    	<form class="layui-form" action="">
+	        <div class="layui-form-item">
+	        	<label class="layui-form-label">名称</label>
+	        	<div class="layui-input-block">
+	        		<input type="text" name="web_name" required  lay-verify="required" placeholder="二级院校名称" autocomplete="off" class="layui-input">
+	        	</div>
+	        </div>
+	        <div class="layui-form-item">
+	        	<label class="layui-form-label">邮箱</label>
+	        	<div class="layui-input-block">
+	        		<input type="text" name="email" required  lay-verify="required" placeholder="接收审核结果" autocomplete="off" class="layui-input">
+	        	</div>
+	        </div>
+	        <div class="layui-form-item">
+	        	<label class="layui-form-label">LOGO</label>
+	        	<div class="layui-input-block">
+	            	<input type="hidden" class="layui-input upload-input" required  lay-verify="required" name="logo_img" id="file1">
+	            	<button type="button" class="layui-btn" id="img1" name="img">
+	            		<i class="layui-icon">&#xe67c;</i>上传图片
+	            	</button>
+	        	</div>
+	        </div>
+	        <div class="layui-form-item layui-form-text">
+	            <label class="layui-form-label">站点简介</label>
+	            <div class="layui-input-block">
+	            	<textarea name="description" placeholder="为保障您顺利通过，请认真输入" class="layui-textarea"></textarea>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-form-text">
+	    		<label class="layui-form-label">申请理由</label>
+	    		<div class="layui-input-block">
+	    			<textarea name="reason" placeholder="请输入内容" class="layui-textarea"></textarea>
+	    		</div>
+			</div>
+	        <div class="layui-form-item">
+	        	<div class="layui-input-block">
+	            	<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	            	<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	        	</div>
+	        </div>
+    	</form>
+	</div>
+	</div>
+	{include file="comm/footer"}

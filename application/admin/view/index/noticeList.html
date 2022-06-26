@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>欢迎页面-X-admin2.2</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="__STATICS__/css/font.css">
+        <link rel="stylesheet" href="__STATICS__/css/xadmin.css">
+        <script src="__STATICS__/layui/layui.js" charset="utf-8"></script>
+        <script src="__STATICS__/js/ace/ace.js"></script>
+        <script src="__STATICS__/js/xadmin.js"></script>
+    </head>
+    
+    <body>
+        <div class="x-nav">
+            <span class="layui-breadcrumb">
+                <a href="">首页</a>
+                <a href="">公告管理</a>
+                <a>
+                    <cite>公告管理</cite>
+                </a>
+            </span>
+            <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+                <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+            </a>
+        </div>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <form class="layui-form layui-col-space5">
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="开始日" name="start" id="start"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="截止日" name="end" id="end"></div>
+                
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="sreach">
+                                        <i class="layui-icon">&#xe615;</i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <!--<div class="layui-card-header">
+                            <button class="layui-btn" onclick="xadmin.open('添加公告','{:url('index/noticeList')}?func=add',800,600)">
+                                <i class="layui-icon"></i>发布公告
+                            </button>
+                        </div>-->
+                        <div class="layui-card-body ">
+                            <table class="layui-table layui-form">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>TID</th>
+                                        <th>时间</th>
+                                        <th>操作</th></tr>
+                                </thead>
+                                <tbody>
+                                    {foreach $data.list as $vo}
+                                    <tr>
+                                        <td>{$vo.id}</td>
+                                        <td>{$vo.tid}</td>
+                                        <td>{$vo.time|date="Y-m-d H:i:s",###}</td>
+                                        <td class="td-manage">
+                                            <a title="查看" onclick="xadmin.open('查看','{:url('index/noticeShow')}?tid={$vo.tid}')" href="javascript:;">
+                                                <i class="layui-icon">&#xe63c;</i></a>
+                                            <a title="删除" onclick="member_del(this,'{$vo.id}')" href="javascript:;">
+                                                <i class="layui-icon">&#xe640;</i></a>
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="layui-card-body ">
+                            <div class="page">
+                                {$data.page}
+                            </div>
+                        </div>
+                        <div class="layui-card-body ">
+                    		<form class="layui-form">
+						        <div class="layui-form-item">
+						        	<textarea id="noticeAddBox"></textarea>
+						        </div>
+						        <div class="layui-form-item">
+						        <div class="layui-input-block" style="float:right;">
+						            <button class="layui-btn" lay-submit lay-filter="noticeAdd" style="background:skyblue;">立即提交</button>
+						        </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <div id='returndt' class="rtdt"></div>
+						        </div>
+					    	</form>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    	<script>
+            layui.use(['layedit','layer','jquery','form'], function(){
+                var layedit = layui.layedit
+                ,form = layui.form
+                ,layer = layui.layer
+                ,jquery = layui.jquery
+                ,set = layedit.set({
+					uploadImage: {
+						url: '{:url('index/index/upload')}' //接口url
+					    ,field: 'file'//上传时的文件参数字段名
+					    ,accept: 'image'
+	                    ,acceptMime: 'image/*'
+	                    ,exts: 'jpg|png|gif|bmp|jpeg'
+	                    ,size: 1024 * 10
+	                    ,done: function (data) {
+		                    console.log(data);
+		                }
+					}
+					, rightBtn: {
+		                type: "layBtn",//default|layBtn|custom  浏览器默认/layedit右键面板/自定义菜单 default和layBtn无需配置customEvent
+		                customEvent: function (targetName, event) {
+		                    //根据tagName分类型设置
+		                    switch (targetName) {
+		                        case "img":
+		                            alert("this is img");
+		                            break;
+		                        default:
+		                            alert("hello world");
+		                            break;
+		                    };
+		                    //或者直接统一设定
+		                    //alert("all in one");
+		                }
+		            }
+		            //测试参数
+		            , backDelImg: false
+		            //开发者模式 --默认为false
+		            , devmode: true
+		            //是否自动同步到textarea
+		            , autoSync: true
+		            //内容改变监听事件
+		            , onchange: function (content) {
+		                console.log(content);
+		            }
+		            //插入代码设置 --hide:false 等同于不配置codeConfig
+		            , codeConfig: {
+		                hide: true,  //是否隐藏编码语言选择框
+		                default: 'javascript', //hide为true时的默认语言格式
+		                encode: true //是否转义
+		                ,class:'layui-code' //默认样式
+		            }
+					, customlink:{
+		                title: '插入LoveWall官网'
+		                , href: 'https://521wall.cn'
+		                ,onmouseup:''
+		            }
+					,tool: [
+		                'html', 'undo', 'redo', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|','removeformat', 'fontFomatt', 'fontfamily','fontSize', 'fontBackColor', 'colorpicker', 'face'
+		                , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'image_alt', 'anchors'
+		                , '|'
+		                , 'table','customlink'
+		                , 'fullScreen','preview'
+		             ]
+		             , height: '300px'
+				});
+                var edit = layedit.build('noticeAddBox'); //建立编辑器
+                layedit.setContent(edit, "<h2>LoveWall提醒您：</h2><p>表白千万条，<br />公告第一天，<br />发布不规范，<br />爱人两行泪。</p><br /><div>By Rhyme·network </div>", false);
+                form.on('submit(noticeAdd)', function(data){
+                    //layer.msg(layedit.getContent(edit));
+                    $.ajax({
+                        url:"{:url('index/noticeAjaxAdd')}"
+                        ,type:'POST'
+                        ,dataType:'JSON'
+                        ,data:{func:'add',content:layedit.getContent(edit)}
+                        ,success:function(res){
+                            if(res.code==1){
+                                layer.msg(res.info,{icon:1,time:1000});
+                            }else{
+                                layer.msg(res.info,{icon:1,time:1000});
+                            }
+                        }
+                    })
+                    return false;
+                });
+            });
+        </script>
+    <script>
+    layui.use(['laydate', 'form'],
+        function() {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+        });
+
+        /*用户-停用*/
+        function member_stop(obj, id) {
+            layer.confirm('确认要停用吗？',
+            function(index) {
+
+                if ($(obj).attr('title') == '启用') {
+
+                    //发异步把用户状态进行更改
+                    $(obj).attr('title', '停用');
+                    $(obj).find('i').html('&#xe62f;');
+
+                    $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                    layer.msg('已停用!', {
+                        icon: 5,
+                        time: 1000
+                    });
+
+                } else {
+                    $(obj).attr('title', '启用');
+                    $(obj).find('i').html('&#xe601;');
+
+                    $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                    layer.msg('已启用!', {
+                        icon: 5,
+                        time: 1000
+                    });
+                }
+
+            });
+        }
+
+        /*用户-删除*/
+        function member_del(obj, id) {
+            layer.confirm('确认要删除吗？',
+            function(index) {
+                //发异步删除数据
+                $.ajax({
+                    url:''
+                    ,type:'POST'
+                    ,dataType:'JSON'
+                    ,data:{id:id,func:'del'}
+                    ,success:function(res){
+                        if(res.code==1){
+                            $(obj).parents("tr").remove();
+                            layer.msg(res.info, {
+                                icon: 1,
+                                time: 1000
+                            });
+                        }else{
+                            layer.msg(res.info, {
+                                icon: 2,
+                                time: 1000
+                            });
+                        }
+                    }
+                    ,error:function(){
+                        layer.msg('网络错误');
+                    }
+                })
+            });
+        }
+
+        function delAll(argument) {
+            var data = tableCheck.getData();
+            layer.confirm('确认要删除吗？' + data,
+            function(index) {
+                //捉到所有被选中的，发异步进行删除
+                layer.msg('删除成功', {
+                    icon: 1
+                });
+                $(".layui-form-checked").not('.header').parents('tr').remove();
+            });
+        }
+    </script>
+</html>

@@ -1,0 +1,52 @@
+{include file="comm/head"}
+	<div class="menu">
+		<div class="container">
+			<nav>
+				<a href="/index/school/indexpage/zid/{$data.zid}" class="">首页</a>
+				<a href="/index/school/realpage/zid/{$data.zid}" class="">实名</a>
+				<a href="/index/school/mouspage/zid/{$data.zid}" class="">匿名</a>
+				<a href="/index/school/callpage/zid/{$data.zid}" class="active">表白</a>
+			</nav>
+		</div>
+	</div>
+</div>
+<div id="content">
+	<div class="container">
+        <form name="datainfo" id="datainfo">
+            <div class="pages">
+				<h2>已进入：<span style="color:red">{$data.web_name}</span></h2>
+				<h2>学区ID:{$data.zid}</h2>
+                <h2>你想说的话</h2>
+                <textarea name="text" id="text" placeholder="你想说的话0-200字" style="min-height: 120px;" maxlength="200" onchange="this.value=this.value.substring(0,200)" onkeydown="this.value=this.value.substring(0,200)" onkeyup="this.value=this.value.substring(0,200)"></textarea>
+                <h2 id="h2qq">你的Q Q</h2>
+                <input name="qq" id="qq" placeholder="QQ"  >
+                <h2 id="h2name">你的昵称</h2>
+                <input name="name" id="name" placeholder="名称">
+                <h2 id="h2sex">你的性别</h2>
+                <div class="col-sm-10">
+                <label class="checkbox-inline i-checks">
+                    <input id="sex" name="sex" type="radio" value="2" checked="checked" ><i></i> ♂♀
+                </label>
+                <label class="checkbox-inline i-checks">
+                    <input id="sex" name="sex" type="radio" value="1" ><i></i> 汉纸
+                </label>
+                <label class="checkbox-inline i-checks">
+                    <input id="sex" name="sex" type="radio" value="0" ><i></i> 妹纸
+                </label> 
+                </div>
+                <br />
+                <h2>是否匿名</h2>
+                <div class="col-sm-10">
+                <label class="checkbox-inline i-checks">
+                    <input id="mous" name="mous" type="radio" value="0" checked="checked"><i></i> 实名
+                </label>
+                <label class="checkbox-inline i-checks">
+                    <input id="mous" name="mous" type="radio" value="1"><i></i> 匿名
+                </label>
+                </div>
+                <br />
+                <button type="button" onclick="submit_data()">发布表白</button>
+            </div>
+        </form>
+	</div>
+	{include file="comm/footer-school"}

@@ -1,0 +1,12 @@
+{
+    "php_ext":"opcache,ioncube",                        //依赖的PHP扩展，仅针对【安装扩展】列表(如：redis,opcache等)中的扩展，PHP默认编译扩展（如：mysqli,curl等）无需安装
+    "chmod":[],        //要独立设置权限的文件或目录
+    "success_url":"/index.php",                                //安装入口或后台管理入口
+    "php_versions":"56,70,71,72,73",        //支持的PHP版本
+    "db_config":"application/database.php",        //数据库配置文件，请将用户名/数据库名称/密码分别替换成 BT_DB_USERNAME/BT_DB_NAME/BT_DB_PASSWORD(不自动安装请留空)
+    "admin_username":"",                        //后台管理默认用户名(不自动安装请留空)
+    "admin_password":"",                //后台管理默认密码(不自动安装请留空)
+    "run_path":"/public",                                        //相对于根目录的运行目录(如ThinkPHP5.X 应该是 /public)
+    "remove_file":["/install","/temp","/.user.ini"],       //部署完成后要被删除的文件或目录
+    "enable_functions":["system","exec"] //要被解禁的PHP函数
+}

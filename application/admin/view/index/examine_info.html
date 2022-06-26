@@ -1,0 +1,137 @@
+<!--
+ * @Description: 
+ * @version: 2.0
+ * @Author: 小橙子
+ * @Date: 2019-05-15 09:33:43
+ * @Website: https://www.kres.cn
+ * @Email: 1697779290@qq.com
+ -->
+ <!DOCTYPE html>
+
+ <html>
+ <head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <title>Contentinfo Page. By the LoveWall 2.0.190520</title>
+   <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+ </head>
+ <body style="padding:10px">
+     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+         <legend>内容详情</legend>
+       </fieldset>
+       <div style="padding: 20px; background-color: #F2F2F2;">
+         <div class="layui-row layui-col-space15">
+           <div class="layui-col-md7">
+             <div class="layui-card">
+               <div class="layui-card-header">详细信息</div>
+               <div class="layui-card-body">
+                    <div class="layui-container">  
+                    <div class="layui-row">
+                        <div class="layui-col-md10">
+                        <span class="layui-badge layui-bg-orange">名称</span>&nbsp;<span class="layui-badge-rim">{$data.web_name}</span><br>
+                        <span class="layui-badge layui-bg-blue">Email</span>&nbsp;<span class="layui-badge layui-bg-green">{$data.email}</span><br>
+                        <span class="layui-badge layui-bg-orange">时间</span>&nbsp;<span class="layui-badge-rim">{$data.addtime}</span><br>
+                        <span class="layui-badge layui-bg-black">理由</span>&nbsp;<span class="layui-badge-rim">{$data.reason}</span><br>
+                        <span class="layui-badge layui-bg-blue">IP</span>&nbsp;<span class="layui-badge-rim">{$data.ip}</span><br>
+                        <span class="layui-badge layui-bg-blue">简介</span>&nbsp;{$data.description}<br>
+                        <span class="layui-badge layui-bg-blue">温馨提示</span>&nbsp;<a href="https://pro.kres.cn/form/index/bugSubmit">如您遇到BUG等问题请及时提交，谢谢合作！</a><br>
+                        </div>
+                    </div>
+               </div>
+             </div>
+           </div>
+        </div>
+              <div class="layui-col-md5">
+                  <div class="layui-card">
+                      <div class="layui-card-header">Logo预览</div>
+                      <div class="layui-card-body">
+                        <div class="layui-anim layui-anim-up" style="vertical-align:middle;text-align: center;">
+                        <img style="display:inline-block;" src="{$data.logo_img}" width="165px" height="165px">
+                         <p id="demoText"></p>
+                      </div>
+                      </div>
+                  </div>
+              </div>
+               <div class="layui-col-md12">
+                 <div class="layui-card">
+                   <div class="layui-card-header">通知操作</div>
+                   <div class="layui-card-body">
+                        <form class="layui-form" action="">
+                        <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">发信内容</label>
+                                <input name="id" type="hidden" value="{$data.id}">
+                                <div class="layui-input-block">
+                                    <textarea style="height: 40px" name="content" placeholder="输入要驳回的内容" class="layui-textarea">您的提交的表白墙校区 {$data.web_name} 已审核</textarea>
+                                </div>
+                                <br>
+                                <div class="layui-form-item">
+                                <div class="layui-input-block" style="float:right">
+                                    <button class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formAdopt">通过</button>
+                                    <button class="layui-btn layui-btn-radius layui-btn-danger" lay-submit lay-filter="formReject">驳回</button>
+                                </div>
+                                </div>
+                        </div>
+                        </form>
+                   </div>
+                   </div>
+                 </div>
+              </div>
+              </div>
+       </div> 
+  
+ <!-- 你的HTML代码 -->
+  
+ <script src="__STATICS__/layui/layui.js"></script>
+ <script src="__STATICS__/js/jquery.min.js"></script>
+ <script>
+ //一般直接写在一个js文件中
+ layui.use(['layer', 'form'], function(){
+   var layer = layui.layer
+   ,form = layui.form;
+   form.on('submit(formAdopt)',function(data){
+       //layer.msg(JSON.stringify(data.field));
+       layer.msg('请稍等',{icon:16});
+       $.ajax({
+           url:"{:url('index/examineResult')}"
+           ,type:'POST'
+           ,data:{func:'Adopt',data:JSON.stringify(data.field)}
+           ,dataType:'JSON'
+           ,success:function(res) {
+               if (res.code==1) {
+                    layer.msg(res.info,{icon:1});
+               } else {
+                    layer.msg(res.info,{icon:2});                   
+               }
+           }
+           ,error:function(){
+            layer.msg('网络错误',{icon:2});
+           }
+       })
+       return false;
+   })
+   form.on('submit(formReject)',function(data){
+    layer.msg('请稍等',{icon:16});
+       $.ajax({
+           url:"{:url('index/examineResult')}"
+           ,type:'POST'
+           ,data:{func:'Reject',data:JSON.stringify(data.field)}
+           ,dataType:'JSON'
+           ,success:function(res) {
+               if (res.code==1) {
+                    layer.msg(res.info,{icon:1});
+               } else {
+                    layer.msg(res.info,{icon:2});                   
+               }
+           }
+           ,error:function(){
+            layer.msg('网络错误',{icon:2});
+           }
+       })
+       return false;
+   })
+   
+   //layer.msg('Hello World');
+ });
+ </script> 
+ </body>
+ </html>

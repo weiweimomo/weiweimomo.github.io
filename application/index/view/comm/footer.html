@@ -1,0 +1,220 @@
+<br />
+	<div class="copyright container">
+		&copy; {$Request.time|date="Y",###} 
+		<a href="/">{$data.system.name}</a>&nbsp;
+		<a href="http://beian.miit.gov.cn" target="_blank">{$data.system.icp}</a>&nbsp;
+		{$data.system.cnzz}
+	</div>
+</div>
+	<!-- 本地js静态资源 -->
+    <script src="__STATIC__/layui/layui.js"></script>
+	<!-- 全站第三方CDN加载JS -->
+	<script src="//cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+	<!-- Cookie储存 -->
+	<script src="//cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	<!-- ip获取 -->
+	<script src="//pv.sohu.com/cityjson?ie=utf-8"></script>
+	<!-- 即时预加载 -->
+    <script src="//instant.page/2.0.0" type="module" integrity="sha384-D7B5eODAUd397+f4zNFAVlnDNDtO1ppV8rPnfygILQXhqu3cUndgHvlcJR2Bhig8"></script>
+    <!-- Public -->
+    <script>
+    	console.log(`%c Info: %c`, `background:#ffc7c7; color: #fff; font-weight: bold`,'','感谢您信任我们并使用我们的程序');
+    	console.log(`%c Demo: %c`, `background:#ffc7c7; color: #fff; font-weight: bold`,'','官方521wall.cn Wiki文档wiki.521wall.cn');
+    	console.log(`%c problem: %c`, `background:#ffc7c7; color: #fff; font-weight: bold`,'','遇到问题请加群731468605');
+		layui.use('element', function(){
+			var element = layui.element;
+		});
+		//天气
+		$.ajax({
+			type: 'GET',
+			url: 'https://www.tianqiapi.com/api/',
+			data: 'version=v1&appid=66414149&appsecret=11AkDKo9',
+			dataType: 'JSON',
+			error: function () {
+				alert('网络错误');
+			},
+			success: function (res) {
+				uptime = res.update_time.substring(11);
+				uptime = uptime.substring(0,uptime.length-3);
+				$("#temp1").html(res.data[0].tem);
+				$('#weather-ico').attr('src','__STATICS__/img/weather/'+res.data[0].wea_img+".png");
+			}
+		});
+		//爱心
+		var ismobile="{$data.ismobile}";
+		if(ismobile==0){
+    		(()=>{let 
+    	 	h=42;
+        	let d=(n)=>Math.floor(Math.random()*n);
+        	let k=(c)=>{let s=document.createElement('style');
+        	if(!!(window.attachEvent && !window.opera)){
+            	s.styleSheet.cssText=c;
+    	}else{
+            	s.appendChild(document.createTextNode(c));
+        	}
+        	document.getElementsByTagName('head')[0].appendChild(s);
+    	};
+    	k('@keyframes u{0%{transform:rotate(0deg);}25%{transform:rotate(10deg);}50%{transform:rotate(0deg);}75%{transform:rotate(-10deg);}100%{transform:rotate(0deg);}};');
+    	k('@keyframes m{0%{margin-top:2vh;opacity:0;}20%{opacity:1.0;margin-top:0vh;margin-left:0vw;transform:rotate('+d(90)+'deg);}100%{opacity:0.4;margin-top:100vh;margin-left:'+d(4)+'vw;transform:rotate(1080deg);}};');
+    	let w=document.createElement('div');
+    	w.id='daWorld';
+    	w.style='animation:u 60s ease-in infinite;position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;';
+    	document.body.appendChild(w);
+    	while(h--){
+        	let o=document.createElement('div');
+        	o.style=`pointer-events:none;opacity:0;animation:m ${d(14)+6}s ease-in ${d(4000)}ms infinite;z-index:1000;position:fixed;top:${d(40)}vh;left:${d(100)}vw;font-size:${d(40)+20}px;color:${['#d00','#e66','#fcc'][d(3)]};`;
+        	o.innerHTML=['♡','♥'][d(2)];w.appendChild(o);
+        	}})()
+    	}
+	</script>
+	<!-- index -->
+	<script>
+		layui.use(['layer', 'form'], function(){
+			var layer = layui.layer
+			,form = layui.form;
+		});
+		var notice=$.cookie('notice');
+		getNotice();
+		function getNotice(){
+			$.post("{:url('index/getNotice')}",{func:'get'},function(data){
+	        	if(data.code==1){
+					if($.cookie('notice_id')!=data.tid){
+						var notice_tpis=layer.confirm(data.info, {
+							btn: ['我知道了','取消'] //按钮
+							}, function(){
+								$.cookie('notice_id',data.tid,{ expires: 7 });
+								layer.close(notice_tpis);
+							}, function(){
+								//取消
+								layer.close(notice_tpis);
+						});
+					}
+				}else{
+					return '获取失败';
+				}
+	        },'JSON');
+	    }
+		$('.avatars').click(function(){
+			var zid=this.id;
+			var sub_id=zid.substring(5,41);
+	      	var name=zid.substr(41,100);
+			layer.open({
+				title:'Tips',
+				content:'即将进入<br/>'+name,
+				btn:['GO!'],
+				yes:function(index){
+					location.href="//"+window.location.host+"/index/school/indexpage/zid/"+sub_id;
+					layer.close(index);
+				}
+			})
+		});
+		$('.likecall').click(function(){
+			var id=this.id;
+			var sub_id=id.substring(5,9);
+			var dzan = $(this);
+			$.get("{:url('index/likeSubmit')}",{
+				id:id,
+			},function(data){
+				if (data.status=='1') {
+					layer.msg(data.info,{icon:1});
+					$('#'+id).attr('class','likecall fa fa-thumbs-up');	
+					dzan.parent().find('#likenums').text(data.count);
+				}else{
+					layer.msg(data.info,{icon:2});
+				}
+			},'json');
+		})
+		$('.comments').click(function() {
+			var id=this.id;
+	      	var ids=id.substr(5,9);
+	       	window.location.href="./article?id="+ids;
+		});
+	</script>
+	<!-- Open -->
+	<script>
+        layui.use(['form','upload'], function(){
+          var form = layui.form;
+          //监听提交
+          var upload = layui.upload;
+        //执行实例
+          var uploadInst = upload.render({
+            elem: '#img1' //绑定元素
+            //,field:'image'
+            ,url: "{:url('index/upload')}" //上传接口
+            ,accept:'images'  // 允许上传的文件类型
+            ,auto:true // 自动上传
+            ,before:function(obj){
+              layer.msg('上传中',{icon:16});
+            }
+            ,done: function(res){
+              //上传完毕回调
+              layer.msg('上传完成');
+              $('#file1').val(res.data.src);
+            }
+            ,error: function(){
+              //请求异常回调
+              layer.msg('上传异常');
+            }
+          });
+          form.on('submit(formDemo)', function(data){
+          //layer.msg(JSON.stringify(data.field));
+          layer.msg('提交中', {
+            icon: 16
+            ,shade: 0.01
+          });
+          $.ajax({
+            url:"{:url('index/openSchool')}"
+            ,data:{data:JSON.stringify(data.field)}
+            ,type:'post'
+            ,dataType:'json'
+            ,success:function(res){
+              if(res.code=="1"){
+              layer.msg('提交成功！请等待审核结果',{icon:1},function(index){
+                  location.href="/";
+                });
+              }
+            }
+            ,error:function(){
+              layer.msg('网络错误');
+            }
+          })
+          return false;
+        });
+      });
+    </script>
+    <!-- Info -->
+    <script>
+		layui.use(['element','form'], function(){
+			var element = layui.element
+			,form=layui.form; 
+			form.on('submit(subSerach)',function(data){
+		    	$.ajax({
+		    		url:''
+		    		,type:'GET'
+		    		,dataType:'JSON'
+		    		,data:{data:JSON.stringify(data.field)}
+		    		,success:function(res){
+		        		if(res.code==1){
+		        			$('.return-data').after(res.data);
+		        		}
+		    		}
+		    		,error:function(){
+		        		layer.msg('请求失败');
+		    		}
+		    	})
+				return false;
+			})
+		});
+		layui.use('util', function(){
+			var util = layui.util;
+			util.fixbar({
+				bgcolor:'#F4A7B9'
+				,click: function(type){
+					console.log(type);
+				}
+			});
+		});
+	</script>
+
+</body>
+</html>

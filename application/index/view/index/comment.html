@@ -1,0 +1,297 @@
+<!--
+ * @Description: 
+ * @version: 2.0Pro
+ * @Author: 锐韵网络(Rhyme Natwork)
+ * @Date: 2019-02-06 14:31:30
+ * @Website: https://521wall.cn
+ * @Email: 1697779290@qq.com Or wy-hai@qq.com
+ -->
+<!DOCTYPE html>
+<html>
+  <head>
+	  <title>
+		  {switch name="postdata.mous"}
+		  	{case value="1"}一位不署名发帖{/case}
+		  	{default /}{$postdata.name} 的帖子
+		  {/switch}
+	  </title>
+	  <meta charset="utf-8"/>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	  <link rel="shortcut icon" href="__STATIC__/favicon.ico"/>
+	  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+	  <link rel="stylesheet" href="__STATIC__/css/app.css" type="text/css" />
+	  <link rel="stylesheet" href="__STATIC__/css/style.css" type="text/css" />
+	  <link rel="stylesheet" href="__STATIC__/css/app.css" type="text/css" />
+	  <link rel="stylesheet" href="__STATIC__/css/font.css" type="text/css" />
+	  <link rel="stylesheet" href="__STATIC__/css/i.css"/>
+	  <link rel="stylesheet" href="__STATIC__/css/comment.css"/>
+	  <link rel="stylesheet" href="__STATIC__/css/barrager.css">
+	  <link rel="stylesheet" href="__STATIC__/css/share.min.css">
+	  <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+	  <meta content="yes" name="apple-mobile-web-app-capable">
+  </head>
+  <body>
+<div id="header">
+	<!-- 天气 -->
+	<div class="header">
+		<div class="heart"></div>
+		<div class="header-weather">
+			<div id="temp1">loding...</div>
+			<img id="weather-ico">
+		</div>
+		<div class="beat beat-1"></div>
+		<div class="beat beat-2"></div>
+	</div>
+	<!-- 水波特效 -->
+	<div class="lovewall_watertiv">
+    	<div class="lovewall_water_1"></div>
+        <div class="lovewall_water_2"></div>
+    </div>
+	<!-- 一言 -->
+	<center>
+	<p id="hitokoto" style="padding:10px">
+		:D 获取中...
+	</p>
+	</center>
+	<script src="https://api.kres.cn/hitokoto?encode=js" defer=""></script>
+	<!-- 一言Ending -->
+	<div class="menu">
+		<div class="container">
+			<nav>
+				<a href="/" class="active">首页</a>
+				<a href="{:url('index/openschool')}" class="">开通</a>
+				<a href="{:url('index/serachInfo')}" class="">搜索</a>
+				<a href="{:url('index/about')}" class="">关于</a>
+				</nav>
+		</div>
+	</div>
+</div>
+<div id="content">
+        <div class="container">
+            <div class="pages">
+    <div >
+                </div>
+                <div class="cont-body">
+                    <div class="cont-body-cont" style="background-color: #FF99CC;">
+                        <div class="index-list-imgdiv">
+                            <img  src="
+                            {switch name="postdata.mous"}
+                            {case value="0"}//q1.qlogo.cn/g?b=qq&amp;nk={$postdata.qq}&amp;s=100{/case}
+                            {default /}__STATIC__/img/mous.jpg
+                        {/switch}" class="index-list-img">
+                        </div>
+                        <div class="index-list-content">
+                            <p class="index-list-content-p">{$postdata.text}</p>
+                        </div>
+                        <div class="index-list-foot">
+                            <span>{$postdata.date|date="Y-m-d H:i:s",###}</span>
+                            <a href="#srtext"><span class="foot-right glyphicon glyphicon-comment"></span></a>
+                            <a href="javascript:;" class="dza" rel="71" onclick="dianzan()"><span id="dzspan" class="foot-right glyphicon glyphicon-thumbs-up" style="color: #018EE8;"></span></a>
+                        </div>
+                    </div>
+                    <div id="share" style="margin: 5px;"><img onclick="javascript:history.go(-1)" src="__STATICS__/img/back.png" style="float: left;width: 25px" alt="返回"></div>
+                    <br/>
+                    <div class="index-comm-send">
+                        <label style="float:left;color: white;">发炎区</label>
+                        <br />
+                        <hr style="background-color: #F596AA;height:1px;border:none;">
+                        <div class="comment-filed">
+                            <div class="comment-num">
+                                <span style="color:white;">{$num}条评论</span>
+                            </div>
+                            <textarea class="txt-commit" style="border-radius:5px"></textarea>
+                            <input type="hidden" id="postid" value="{$post_id}">
+                            <div class="div-txt-submit">
+            
+                                <a class="comment-submit" parent_id="0" style="border-radius: 500px;" onclick="submit()"><span>biu~</span></a>
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="comment">
+                    <table class="comment-table">
+                        {eq name="num" value="0"}
+                            <tr><td><p style="text-align: center;color: white">你的机会来了~</p></td></tr>
+                        {else/}
+                            <tbody><tr>
+                                    {volist name="data.list" id="comm_data"}
+                                <td class="comment-img" rowspan="2">
+                                    <img src="{$comm_data.head_pic}">
+                                </td>
+                                <td class="comment-time"><span style="color:#fff">{$comm_data.create_time}</span><br><span style="color:white;">{$comm_data.nickname}&nbsp;：</span></td>
+                            </tr>
+                            <tr>
+                                <td class="comment-cont">
+                                    <p  style="	margin-top: -5px;">{$comm_data.content}</p>
+                                    <p><hr class="comment-hr" style="background-color: #e87794;height:1px;border:none;"></p>
+                                </td>
+                            </tr>
+                            {/volist}
+                        </tbody>
+                        {/eq}
+                    </table>
+                </div>
+                </div>      
+            </div> 
+            <br>   
+        <div class="copyright container">
+            &copy; 2019 
+            <a href="/">{$data.system.name}</a>&nbsp;&nbsp;
+            <a href="http://beian.miit.gov.cn" target="_blank">{$data.system.icp}</a>
+        </div>
+    </div>
+    <script src="__STATIC__/js/jquery.min.js"></script> 
+    <script src="__STATIC__/js/jquery.share.min.js"></script> 
+    <script src="__STATIC__/js/jquery.barrager.js"></script>
+    <script src="__STATIC__/layui/layui.js"></script>
+    <script>
+        console.log(`%c Info:`, `color: #03A9F4; font-weight: bold`, '欢迎来到这个页面！首先感谢您信任我们并使用我们的程序，遇到BUG可提交至下方邮箱，谢谢您的配合！');
+        console.log(`%c Site:`, `color: #03A9F4; font-weight: bold`, 'https://support.kres.cn Or https://521wall.cn');
+        console.log(`%c Email:`, `color: #4CAF50; font-weight: bold`, 'support@kres.cn Or wy-hai@qq.com');
+        $('#share').share({sites: ['qzone', 'qq', 'weibo','wechat']});
+        layui.use('layer', function(){
+            var layer = layui.layer;
+        }); 
+        function sendBarrager(){
+            var info=$('input[name=title]').val();
+            var qq=$('input[name=qq]').val();
+            var patrn=/^[1-9]\d{4,10}$/;
+            var post_id=$('#postid').val();
+            var color=$('#color-value').val();
+            if (info==''||qq=='') {
+                layer.msg('请填写完整');
+                return false;
+            }
+            if(!patrn.exec(qq)){
+                layer.msg('请输入正确的qq号');
+                $('input[name=qq]').val('');
+                $('input[name=qq]').focus();
+                return false;
+            }
+            layer.msg('发送中', {
+                icon: 16
+                ,shade: 0.01
+            });
+    
+        $.ajax({
+            url:"{:url('school/sendbar')}"
+            ,type:'POST'
+            ,dataType:'JSON'
+            ,data:{post_id:post_id,info:info,qq:qq,color:color}
+            ,success:function(res){
+                if (res.code==1) {
+                    layer.msg(res.info,function(){
+                        layer.closeAll();
+                    });
+                }else{
+                    layer.msg('发送失败，请重试');
+                }
+            }
+            ,error:function(){
+                layer.msg('网络错误');
+            }
+        })
+        }  
+        layui.use('util', function(){
+            var util = layui.util;
+            var htmldoc="<div style='padding:10px;'>"
+            +"<input type='text' name='title' required  placeholder='请输入内容' autocomplete='off' class='layui-input'><br/>"
+            +"<input type='text' name='qq' required  placeholder='请输入QQ' autocomplete='off' class='layui-input'><br/>"
+            +"<input type='text' value='' placeholder='请选择颜色' class='layui-input' id='color-value' disabled ><br/>"
+            +"<div id='color-select'></div>"
+            +"<button class='layui-btn' style='background:#F4A7B9;float:right;margin-bottom:10px;' onclick='sendBarrager();'>立即提交</button><br/><br/></div>";
+            util.fixbar({
+                bar1: true
+                ,bgcolor:'#F4A7B9'
+                ,click: function(type){
+                console.log(type);
+                if(type === 'bar1'){
+                    layer.open({
+                        type: 1,
+                        closeBtn: 1, //不显示关闭按钮
+                        title:'发送弹幕',
+                        anim: 2,
+                        shadeClose: true, //开启遮罩关闭
+                        content: htmldoc
+                        });
+                    }
+                    layui.use('colorpicker', function(){
+                    var $ = layui.$
+                    ,colorpicker = layui.colorpicker;
+                    //常规使用
+                    //表单赋值
+                    colorpicker.render({
+                        elem: '#color-select'
+                        ,color: '#1c97f5'
+                        ,done: function(color){
+                        $('#color-value').val(color);
+                        }
+                    });
+                });
+                }
+            });
+        });
+        
+        var looper_time=3*1000;
+        var run_once=true;
+        var post_id=$('#postid').val();
+        do_barrager();
+        function do_barrager(){
+          if(run_once){
+              looper=setInterval(do_barrager,looper_time);                
+              run_once=false;
+          }
+          $.getJSON("{:url('school/getbarrager')}"+"?id="+post_id,function(data){
+              if(data.info){
+                $('body').barrager(data);
+              }
+          });
+        }               
+      $.ajax({
+        type: 'GET',
+        url: 'https://www.tianqiapi.com/api/',
+        data: 'version=v1&appid=66414149&appsecret=11AkDKo9',
+        dataType: 'JSON',
+        error: function () {
+            layer.msg('网络错误');
+        },
+        success: function (res) {
+            uptime = res.update_time.substring(11);
+            uptime = uptime.substring(0,uptime.length-3);
+            $("#temp1").html(res.data[0].tem);
+            $('#weather-ico').attr('src','__STATICS__/img/weather/'+res.data[0].wea_img+".png");
+        }
+    });
+        function submit(){
+            var post_id=$('#postid').val();
+            var content=$('.txt-commit').val();
+              if(content==""){
+                layer.msg("来说点什么吧~",{icon:3});
+                  return false;
+            }
+            layer.msg('发送中...', {
+              icon: 16
+              ,shade: 0.01
+            });
+            $.ajax({
+                url:"{:url('index/addComment')}",
+                type:'POST',
+                dataType:'json',
+                data:{content:content,post_id:post_id,comment:"1"},
+                success:function(data){
+                    if(data.code=="1"){
+                        layer.msg(data.msg,{icon:1,time:1000},function(index){
+                            location=location;
+                        });
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                },
+            })
+    
+        }
+    </script>
+    </body>
+    </html>

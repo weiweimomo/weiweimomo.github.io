@@ -1,0 +1,122 @@
+<!--
+ * @Description: 
+ * @version: 2.0
+ * @Author: 小橙子
+ * @Date: 2019-05-16 14:31:30
+ * @Website: https://www.kres.cn
+ * @Email: 1697779290@qq.com
+ -->
+<!doctype html>
+<html  class="x-admin-sm">
+<head>
+	<meta charset="UTF-8">
+	<title>后台登录-LoveWall2.0</title>
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="__STATICS__/css/font.css">
+    <link rel="stylesheet" href="__STATICS__/css/login.css">
+	  <link rel="stylesheet" href="__STATICS__/css/xadmin.css">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="__STATICS__/layui/layui.js" charset="utf-8"></script>
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="login-bg">
+    
+    <div class="login layui-anim layui-anim-up">
+        <div class="message">验证邮箱进行登录</div>
+        <div id="darkbannerwrap"></div>
+        
+        <form method="post" class="layui-form" >
+            <input name="email" placeholder="邮箱"  type="text" lay-verify="email" class="layui-input" >
+            <hr class="hr15">
+            <input name="code" style="width:60%;float: left" lay-verify="number" placeholder="随机密码"  type="password" class="layui-input"><input onclick="sendEmail();" id="getcode" value="获取验证码" style="width:35%;float: right;" type="button">
+            <hr class="hr15">
+            <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+            <hr class="hr20" >
+        </form>
+    </div>
+
+    <script>
+        $(function  () {
+            layui.use('form', function(){
+              var form = layui.form;
+              form.on('submit(login)', function(data){
+                //layer.msg(JSON.stringify(data.field))
+                // alert(888)
+                layer.msg('登录中', {
+                icon: 16
+                ,shade: 0.01
+                });
+                $.ajax({
+                    url:"{:url('comm/login_em')}"
+                    ,dataType:'JSON'
+                    ,data:{func:'login',data:JSON.stringify(data.field)}
+                    ,type:'POST'
+                    ,success:function(data){
+                        if(data.code==0){
+                            layer.msg(data.msg,{icon:1},function(){
+                                location.href="/admin/index";
+                            });
+                        }
+                        else{
+                            layer.msg(data.msg,{icon:2});
+                        }
+                    }
+                })
+                return false;
+              });
+            }); 
+            
+        });
+        function sendEmail() {
+                var email=$('input[name=email]').val();
+                if (email!='') {
+                    layer.msg('发送中', {
+                    icon: 16
+                    ,shade: 0.01
+                    });
+                    $.ajax({
+                        url:''
+                        ,type:'POST'
+                        ,data:{func:'email_send',email:email}
+                        ,dataType:'JSON'
+                        ,success:function(res) {
+                            if (res.code==1) {
+                                settime();
+                                layer.msg(res.msg,{icon:1,time:1000});
+                            } else {
+                                layer.msg(res.msg,{icon:2,time:1000});                                
+                            }
+                        }
+                    })
+                }else{
+                    layer.msg('please enter email');
+                }
+            }
+            var countdown=60;  
+            var _generate_code = $("#getcode");  
+            function settime() {  
+            if (countdown == 0) {  
+                _generate_code.attr("disabled",false);  
+                _generate_code.val("获取验证码");  
+                countdown = 60;  
+                return false;  
+            } else {  
+                $(".generate_code").attr("disabled", true);  
+                _generate_code.val("重新发送(" + countdown + ")");  
+                countdown--;  
+            }  
+            setTimeout(function() {  
+                settime();  
+            },1000);  
+            } 
+    </script>
+    <!-- 底部结束 -->
+
+</body>
+</html>

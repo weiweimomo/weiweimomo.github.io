@@ -1,0 +1,52 @@
+{include file="comm/head"}
+	<div class="menu">
+		<div class="container">
+			<nav>
+				<a href="/index/school/indexpage/zid/{$data.zid}" class="">首页</a>
+                <a href="/index/school/realpage/zid/{$data.zid}" class="" >实名</a>
+                <a href="/index/school/mouspage/zid/{$data.zid}" class="active">匿名</a>
+                <a href="/index/school/callpage/zid/{$data.zid}" class="">表白</a>
+			</nav>
+		</div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="container">
+		<div class="list-item">
+				{volist name="indexContent" id="vo"}
+            <div class="
+            	{switch	name="vo.sex"}
+                	{case value="1"}item boy{/case}
+                	{case value="0"}item girl{/case}				
+                	{default /}item 
+            	{/switch}
+            	">
+				<article>
+               		{$vo.text}
+				</article>
+				<div class="author">
+					{switch	name="vo.mous"}
+						{case value="0"}<img class="avatars avatar" id="{$vo.qq}" src="//q1.qlogo.cn/g?b=qq&amp;nk={$vo.qq}&amp;s=100">{/case}			
+						{default /}<img class="avatar" src="__STATICS__/img/mous.jpg">
+					{/switch}
+					<p class="name">
+						{switch	name="vo.mous"}
+							{case value="0"}{$vo.name}{/case}			
+						{default /}匿名 
+						{/switch}
+					</p>
+					<p class="date">
+							{$vo.date|date="Y-m-d H:i:s",###}
+						<a id="comm-{$vo.id}" class="comments fa fa-comments-o" style="float: right;">&nbsp;<span>{$vo.comm}</span></a>
+						<a id="{$vo.id}" class="likecall fa fa-thumbs-o-up" style="float: right;margin-right: 5px">&nbsp;<span id="likenums" >{$vo.like}</span></a>	
+					</p>
+				</div>
+			</div>
+			{/volist}
+		</div>
+	</div>
+	<div class="list-pages">
+			{$page}<br/>
+	</div>
+	{include file="comm/footer-school"}
